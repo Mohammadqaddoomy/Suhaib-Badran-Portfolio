@@ -6,7 +6,7 @@ const Contact = () => {
   const { isDark } = useTheme();
   
   const socialLinks = [
-    { icon: Instagram, url: 'https://www.instagram.com/suhebadran/', label: 'Instagram' }
+    { icon: Instagram, url: 'https://www.instagram.com/sohebadran/', label: 'Instagram' }
   ];
 
   return (

@@ -1,6 +1,7 @@
 import { motion as Motion, AnimatePresence } from 'framer-motion';
-import { X, Maximize2, Minimize2 } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 const Lightbox = ({ videoSrc, onClose }) => {
 
@@ -20,92 +21,89 @@ const Lightbox = ({ videoSrc, onClose }) => {
     };
   }, [videoSrc, onClose]);
 
+  if (!videoSrc) return null;
 
-
-  return (
-    <AnimatePresence>
-      {videoSrc && (
-        <div
-          onClick={onClose}
-          className="fixed inset-0 bg-black/98 backdrop-blur-sm"
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            marginTop:"40%",
-            padding: '2rem'
-          }}
-        >
-          {/* Background Gradient Effect */}
-          <div className="absolute inset-0 bg-linear-to-br from-black via-gray-900 to-black opacity-50" />
-
-          <Motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative z-10 w-full max-w-6xl"
-          >
-            {/* Video Container */}
-            <Motion.div
-              className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/50 bg-black w-full"
-              initial={{ boxShadow: '0 0 0 0 rgba(255,255,255,0)' }}
-              animate={{ 
-                boxShadow: '0 0 60px 10px rgba(255,255,255,0.1)',
-              }}
-              transition={{ duration: 0.5 }}
+  // Use Portal to render outside any transformed parents
+  return createPortal(
+    <div className="lightbox-portal">
+      <AnimatePresence>
+        {videoSrc && (
+          <>
+            {/* Dark Overlay */}
+            <Motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/95"
+              onClick={onClose}
+            />
+            
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-red-500 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
             >
-              {/* Close Button */}
-              <Motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                whileHover={{ scale: 1.1, rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={onClose}
-                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-red-500 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
-                aria-label="Close"
+              <X size={24} />
+            </button>
+
+            {/* Video Container - Centered */}
+            <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8 pointer-events-none">
+              <Motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="w-full max-w-5xl pointer-events-auto"
+                onClick={(e) => e.stopPropagation()}
               >
-                <X size={20} />
-              </Motion.button>
-
-              {/* Video Player - support both direct video and Google Drive embed */}
-              {videoSrc.includes('drive.google.com') ? (
-                <div className="relative w-full bg-black" style={{ paddingTop: '56.25%' /* 16:9 Aspect Ratio */ }}>
-                  <iframe
-                    src={videoSrc}
-                    allow="autoplay; fullscreen"
-                    className="absolute top-0 left-0 w-full h-full"
-                    allowFullScreen
-                    title="Video player"
-                  />
+              {/* Video Wrapper */}
+              <div className="relative rounded-xl md:rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/20">
+                
+                {/* Video Player - 16:9 Aspect Ratio */}
+                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                  {videoSrc.includes('youtube.com') || videoSrc.includes('youtu.be') || videoSrc.includes('youtube-nocookie.com') ? (
+                    <iframe
+                      src={videoSrc}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      className="absolute top-0 left-0 w-full h-full"
+                      allowFullScreen
+                      title="YouTube video player"
+                      frameBorder="0"
+                      loading="lazy"
+                    />
+                  ) : videoSrc.includes('drive.google.com') ? (
+                    <iframe
+                      src={videoSrc}
+                      allow="autoplay; fullscreen"
+                      className="absolute top-0 left-0 w-full h-full"
+                      allowFullScreen
+                      title="Video player"
+                    />
+                  ) : (
+                    <video
+                      src={videoSrc}
+                      controls
+                      autoPlay
+                      playsInline
+                      className="absolute top-0 left-0 w-full h-full object-contain bg-black"
+                    >
+                      <source src={videoSrc} type="video/mp4" />
+                    </video>
+                  )}
                 </div>
-              ) : (
-                <div className="relative w-full bg-black" style={{ paddingTop: '56.25%' /* 16:9 Aspect Ratio */ }}>
-                  <video
-                    src={videoSrc}
-                    controls
-                    autoPlay
-                    className="absolute top-0 left-0 w-full h-full object-contain"
-                    title="Video player"
-                  >
-                    <source src={videoSrc} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              )}
 
-              {/* Decorative Corners */}
-              <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-white/20 pointer-events-none" />
-              <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-white/20 pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-white/20 pointer-events-none" />
-              <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-white/20 pointer-events-none" />
+                {/* Corner Decorations */}
+                <div className="absolute top-0 left-0 w-8 h-8 md:w-12 md:h-12 border-t-2 border-l-2 border-white/40 rounded-tl-xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 border-t-2 border-r-2 border-white/40 rounded-tr-xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-8 h-8 md:w-12 md:h-12 border-b-2 border-l-2 border-white/40 rounded-bl-xl pointer-events-none" />
+                <div className="absolute bottom-0 right-0 w-8 h-8 md:w-12 md:h-12 border-b-2 border-r-2 border-white/40 rounded-br-xl pointer-events-none" />
+              </div>
             </Motion.div>
-          </Motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+          </div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>,
+    document.body
   );
 };
 

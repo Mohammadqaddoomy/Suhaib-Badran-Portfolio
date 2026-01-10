@@ -7,14 +7,23 @@
   -webkit-touch-callout: none;
 }
 
-/* Force hardware acceleration for Android */
-*,
-*::before,
-*::after {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+/* Lightbox Portal - Must render above everything */
+.lightbox-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  transform: none !important;
+  -webkit-transform: none !important;
+}
+
+.lightbox-portal * {
+  transform: none;
+  -webkit-transform: none;
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
 }
 
 html {

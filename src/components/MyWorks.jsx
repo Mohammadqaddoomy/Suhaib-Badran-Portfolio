@@ -115,14 +115,32 @@ const MyWorks = ({ setLightboxVideo }) => {
   };
 
   const handleVideoClick = (videoUrl) => {
-    // Convert Google Drive link to embeddable format
     let embedUrl = videoUrl;
-    if (videoUrl.includes('drive.google.com')) {
+    
+    // Convert YouTube link to embeddable format (using nocookie for privacy)
+    if (videoUrl.includes('youtube.com/watch')) {
+      const videoId = videoUrl.match(/[?&]v=([^&]+)/)?.[1];
+      if (videoId) {
+        embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+      }
+    } else if (videoUrl.includes('youtu.be/')) {
+      const videoId = videoUrl.match(/youtu\.be\/([^?]+)/)?.[1];
+      if (videoId) {
+        embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+      }
+    } else if (videoUrl.includes('youtube.com/embed')) {
+      // Already an embed URL, just add parameters if missing
+      if (!videoUrl.includes('autoplay')) {
+        embedUrl = videoUrl + (videoUrl.includes('?') ? '&' : '?') + 'autoplay=1&rel=0&playsinline=1';
+      }
+    } else if (videoUrl.includes('drive.google.com')) {
+      // Convert Google Drive link to embeddable format
       const fileId = videoUrl.match(/\/d\/([^/]+)/)?.[1];
       if (fileId) {
         embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
       }
     }
+    
     setLightboxVideo(embedUrl);
     handleCloseModal();
   };
@@ -273,22 +291,24 @@ const MyWorks = ({ setLightboxVideo }) => {
             onClick={handleCloseModal}
             className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm overflow-y-auto"
           >
-            <div className="min-h-screen flex items-start md:items-center justify-center p-4 md:p-8">
+            <div className="min-h-screen flex items-start md:items-center justify-center p-4 sm:p-6 md:p-8">
               <Motion.div
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative bg-zinc-900 border-2 border-white/10 rounded-2xl md:rounded-3xl p-4 sm:p-8 max-w-6xl w-full my-8"
+                className="relative bg-zinc-900/95 backdrop-blur-xl border-2 border-white/10 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-10 max-w-6xl w-full my-4 md:my-8 shadow-2xl"
               >
                 {/* Close */}
-                <button
+                <Motion.button
                   onClick={handleCloseModal}
-                  className="sticky top-4 md:absolute md:top-6 md:right-6 ml-auto mb-4 md:mb-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center z-20 transition-colors"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="sticky top-0 md:absolute md:top-6 md:right-6 ml-auto mb-4 md:mb-0 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center z-20 transition-all duration-200 backdrop-blur-sm border border-white/10"
                 >
                 <X size={20} />
-              </button>
+              </Motion.button>
 
               {/* Title */}
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">{selectedFolder.name}</h2>
@@ -304,19 +324,20 @@ const MyWorks = ({ setLightboxVideo }) => {
                   {videos.map((video, i) => (
                     <Motion.div
                       key={video.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
+                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: i * 0.05, duration: 0.3 }}
+                      whileHover={{ scale: 1.02, y: -4 }}
                       onClick={() => handleVideoClick(video.video_url)}
-                      className="group cursor-pointer bg-white/5 border-2 border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all"
+                      className="group cursor-pointer bg-white/5 border-2 border-white/10 rounded-xl md:rounded-2xl overflow-hidden hover:border-white/30 hover:shadow-xl hover:shadow-white/5 transition-all duration-300"
                     >
                       {/* Thumbnail */}
-                      <div className="aspect-video bg-zinc-800 relative">
+                      <div className="aspect-video bg-zinc-800 relative overflow-hidden">
                         {video.thumbnail_url ? (
                           <img
                             src={video.thumbnail_url}
                             alt={video.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
@@ -325,10 +346,14 @@ const MyWorks = ({ setLightboxVideo }) => {
                         )}
                         
                         {/* Play Overlay */}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                            <Play size={24} className="text-white ml-1" />
-                          </div>
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <Motion.div 
+                            initial={false}
+                            whileHover={{ scale: 1.15 }}
+                            className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/40 shadow-lg"
+                          >
+                            <Play size={28} className="text-white ml-1" fill="white" />
+                          </Motion.div>
                         </div>
                       </div>
 

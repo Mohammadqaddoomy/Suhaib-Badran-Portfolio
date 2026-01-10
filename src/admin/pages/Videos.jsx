@@ -308,13 +308,14 @@ const Videos = () => {
               {/* Google Drive Link */}
               <div className="mb-4">
                 <label className="block text-white text-sm font-semibold mb-2">
-                  Google Drive Link *
+                  youtube Link *
                 </label>
                 <input
                   type="url"
                   value={formData.videoUrl}
                   onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                  placeholder="https://drive.google.com/file/d/..."
+                  placeholder="https://youtu.be/......
+"
                   className="w-full bg-white/5 border-2 border-white/10 rounded-2xl px-4 py-3 text-white placeholder-gray-500 focus:border-white/30 focus:outline-none"
                   required
                 />

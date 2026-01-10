@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion as Motion } from 'framer-motion';
 import { supabase } from '../../config/firebase';
-import { Folder, Plus, Edit2, Trash2, Video } from 'lucide-react';
+import { Folder, Plus, Edit2, Trash2, Video, ChevronUp, ChevronDown } from 'lucide-react';
 
 const Folders = () => {
   const [folders, setFolders] = useState([]);
@@ -172,6 +172,33 @@ const Folders = () => {
     setDeleteConfirm(null);
   };
 
+  const handleMoveFolder = async (folderIndex, direction) => {
+    const newIndex = direction === 'up' ? folderIndex - 1 : folderIndex + 1;
+    
+    // Check bounds
+    if (newIndex < 0 || newIndex >= folders.length) return;
+
+    try {
+      const currentFolder = folders[folderIndex];
+      const swapFolder = folders[newIndex];
+
+      // Swap the order values
+      await supabase
+        .from('folders')
+        .update({ order: newIndex })
+        .eq('id', currentFolder.id);
+
+      await supabase
+        .from('folders')
+        .update({ order: folderIndex })
+        .eq('id', swapFolder.id);
+
+      fetchFolders();
+    } catch (error) {
+      console.error('Error moving folder:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -229,6 +256,38 @@ const Folders = () => {
             </div>
 
             <div className="flex gap-2 mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/10">
+              {/* Move Up Button */}
+              <Motion.button
+                onClick={() => handleMoveFolder(index, 'up')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                disabled={index === 0}
+                className={`flex items-center justify-center px-2 py-2 rounded-xl transition-colors ${
+                  index === 0 
+                    ? 'bg-white/5 text-white/20 cursor-not-allowed' 
+                    : 'bg-white/10 text-white hover:bg-white/20'
+                }`}
+                title="Move up"
+              >
+                <ChevronUp size={16} />
+              </Motion.button>
+              
+              {/* Move Down Button */}
+              <Motion.button
+                onClick={() => handleMoveFolder(index, 'down')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                disabled={index === folders.length - 1}
+                className={`flex items-center justify-center px-2 py-2 rounded-xl transition-colors ${
+                  index === folders.length - 1 
+                    ? 'bg-white/5 text-white/20 cursor-not-allowed' 
+                    : 'bg-white/10 text-white hover:bg-white/20'
+                }`}
+                title="Move down"
+              >
+                <ChevronDown size={16} />
+              </Motion.button>
+
               <Motion.button
                 onClick={() => setEditingFolder(folder)}
                 whileHover={{ scale: 1.05 }}

@@ -2,22 +2,38 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion as Motion } from 'framer-motion';
 import { supabase } from '../../config/firebase';
-import { Plus, Edit2, Trash2, Upload, ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Upload, ArrowLeft, Image as ImageIcon, FolderInput } from 'lucide-react';
 
 const Videos = () => {
   const { folderId } = useParams();
   const navigate = useNavigate();
   const [folder, setFolder] = useState(null);
+  const [allFolders, setAllFolders] = useState([]);
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingVideo, setEditingVideo] = useState(null);
+  const [movingVideo, setMovingVideo] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     videoUrl: '',
     thumbnail: null
   });
   const [uploading, setUploading] = useState(false);
+
+  const fetchAllFolders = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('folders')
+        .select('*')
+        .order('order', { ascending: true });
+
+      if (error) throw error;
+      setAllFolders(data || []);
+    } catch (error) {
+      console.error('Error fetching folders:', error);
+    }
+  };
 
   const fetchFolderAndVideos = async () => {
     try {
@@ -49,7 +65,25 @@ const Videos = () => {
 
   useEffect(() => {
     fetchFolderAndVideos();
+    fetchAllFolders();
   }, [folderId]);
+
+  const handleMoveVideo = async (videoId, targetFolderId) => {
+    try {
+      const { error } = await supabase
+        .from('videos')
+        .update({ folder_id: targetFolderId })
+        .eq('id', videoId);
+
+      if (error) throw error;
+
+      setMovingVideo(null);
+      fetchFolderAndVideos();
+    } catch (error) {
+      console.error('Error moving video:', error);
+      alert('Error moving video. Please try again.');
+    }
+  };
 
   const handleThumbnailChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -266,6 +300,15 @@ const Videos = () => {
                     Edit
                   </Motion.button>
                   <Motion.button
+                    onClick={() => setMovingVideo(video)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center justify-center gap-1 px-3 py-2 bg-blue-500/10 text-blue-400 rounded-xl hover:bg-blue-500/20 transition-colors"
+                    title="Move to another folder"
+                  >
+                    <FolderInput size={16} />
+                  </Motion.button>
+                  <Motion.button
                     onClick={() => handleDeleteVideo(video.id)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -474,6 +517,58 @@ const Videos = () => {
                 </button>
               </div>
             </form>
+          </Motion.div>
+        </div>
+      )}
+
+      {/* Move Video Modal */}
+      {movingVideo && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <Motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-zinc-900 border-2 border-white/10 rounded-3xl p-8 max-w-md w-full"
+          >
+            <h2 className="text-2xl font-bold text-white mb-2">Move Video</h2>
+            <p className="text-gray-400 mb-6">
+              Select a folder to move "<span className="text-white">{movingVideo.title}</span>" to:
+            </p>
+            
+            <div className="space-y-2 max-h-64 overflow-y-auto mb-6">
+              {allFolders
+                .filter(f => f.id !== parseInt(folderId))
+                .map((targetFolder) => (
+                  <button
+                    key={targetFolder.id}
+                    onClick={() => handleMoveVideo(movingVideo.id, targetFolder.id)}
+                    className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 border-2 border-white/10 rounded-2xl hover:bg-white/10 hover:border-white/20 transition-all text-left"
+                  >
+                    {targetFolder.logo_url ? (
+                      <img
+                        src={targetFolder.logo_url}
+                        alt={targetFolder.name}
+                        className="w-10 h-10 rounded-lg object-cover"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <FolderInput size={20} className="text-white/50" />
+                      </div>
+                    )}
+                    <span className="text-white font-medium">{targetFolder.name}</span>
+                  </button>
+                ))}
+              
+              {allFolders.filter(f => f.id !== parseInt(folderId)).length === 0 && (
+                <p className="text-gray-500 text-center py-4">No other folders available</p>
+              )}
+            </div>
+
+            <button
+              onClick={() => setMovingVideo(null)}
+              className="w-full px-4 py-3 bg-white/5 text-white rounded-2xl hover:bg-white/10 transition-colors"
+            >
+              Cancel
+            </button>
           </Motion.div>
         </div>
       )}

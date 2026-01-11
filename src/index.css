@@ -9,21 +9,34 @@
 
 /* Lightbox Portal - Must render above everything */
 .lightbox-portal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important; /* Use dynamic viewport height for mobile */
   z-index: 99999;
+  /* Reset any inherited transforms that break fixed positioning */
   transform: none !important;
   -webkit-transform: none !important;
+  /* Ensure it starts from viewport top on mobile */
+  margin: 0;
+  padding: 0;
+  /* Force GPU layer */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Prevent scroll chaining to parent */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* Isolate from page scroll */
+  isolation: isolate;
 }
 
-.lightbox-portal * {
-  transform: none;
-  -webkit-transform: none;
-  backface-visibility: visible !important;
-  -webkit-backface-visibility: visible !important;
+/* Ensure body doesn't scroll when lightbox is open */
+body.lightbox-open {
+  overflow: hidden !important;
 }
 
 html {
@@ -140,12 +153,6 @@ body {
     100% {
       background-position: 0% 50%;
     }
-  }
-  
-  /* Ensure hardware acceleration on mobile */
-  * {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
   }
   
   /* Force slower animations on mobile by overriding inline styles */
@@ -278,11 +285,9 @@ body {
   }
 }
 
-/* Hardware acceleration for smooth animations */
+/* Hardware acceleration for smooth animations - using will-change instead of transform */
 .glass-effect,
-.gradient-text,
-[class*="motion"] {
-  transform: translateZ(0);
+.gradient-text {
   will-change: transform, opacity;
 }
 

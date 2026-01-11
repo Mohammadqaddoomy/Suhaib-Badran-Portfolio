@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { Grid3x3, X, Play } from 'lucide-react';
 import { supabase } from '../config/firebase';
@@ -106,19 +107,28 @@ const MyWorks = ({ setLightboxVideo }) => {
 
   const handleFolderClick = async (folder) => {
     setSelectedFolder(folder);
+    document.body.style.overflow = 'hidden';
     await fetchVideos(folder.id);
   };
 
   const handleCloseModal = () => {
     setSelectedFolder(null);
     setVideos([]);
+    document.body.style.overflow = 'unset';
   };
 
   const handleVideoClick = (videoUrl) => {
     let embedUrl = videoUrl;
     
+    // Convert YouTube Shorts link to embeddable format
+    if (videoUrl.includes('youtube.com/shorts/')) {
+      const videoId = videoUrl.match(/shorts\/([^?]+)/)?.[1];
+      if (videoId) {
+        embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+      }
+    }
     // Convert YouTube link to embeddable format (using nocookie for privacy)
-    if (videoUrl.includes('youtube.com/watch')) {
+    else if (videoUrl.includes('youtube.com/watch')) {
       const videoId = videoUrl.match(/[?&]v=([^&]+)/)?.[1];
       if (videoId) {
         embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
@@ -281,95 +291,99 @@ const MyWorks = ({ setLightboxVideo }) => {
         </Motion.div>
       </div>
 
-      {/* Videos Modal */}
-      <AnimatePresence>
-        {selectedFolder && (
-          <Motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleCloseModal}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm overflow-y-auto"
-          >
-            <div className="min-h-screen flex items-start md:items-center justify-center p-4 sm:p-6 md:p-8">
-              <Motion.div
-                initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                onClick={(e) => e.stopPropagation()}
-                className="relative bg-zinc-900/95 backdrop-blur-xl border-2 border-white/10 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-10 max-w-6xl w-full my-4 md:my-8 shadow-2xl"
-              >
-                {/* Close */}
-                <Motion.button
-                  onClick={handleCloseModal}
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="sticky top-0 md:absolute md:top-6 md:right-6 ml-auto mb-4 md:mb-0 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center z-20 transition-all duration-200 backdrop-blur-sm border border-white/10"
+      {/* Videos Modal - Using Portal to fix positioning on mobile */}
+      {selectedFolder && createPortal(
+        <AnimatePresence>
+          <div className="lightbox-portal">
+            <Motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleCloseModal}
+              className="fixed inset-0 bg-black/95 overflow-y-auto overscroll-contain"
+              style={{ top: 0, left: 0, right: 0, bottom: 0, WebkitOverflowScrolling: 'touch' }}
+            >
+              <div className="min-h-full flex items-center justify-center p-4 sm:p-6 md:p-8">
+                <Motion.div
+                  initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="relative bg-zinc-900/95 backdrop-blur-xl border-2 border-white/10 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-10 max-w-6xl w-full my-4 md:my-8 shadow-2xl max-h-[90vh] overflow-y-auto overscroll-contain"
                 >
-                <X size={20} />
-              </Motion.button>
+                  {/* Close */}
+                  <Motion.button
+                    onClick={handleCloseModal}
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="sticky top-0 md:absolute md:top-6 md:right-6 ml-auto mb-4 md:mb-0 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center z-20 transition-all duration-200 backdrop-blur-sm border border-white/10"
+                  >
+                    <X size={20} />
+                  </Motion.button>
 
-              {/* Title */}
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">{selectedFolder.name}</h2>
-              <p className="text-gray-400 mb-8">{videos.length} videos</p>
+                  {/* Title */}
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">{selectedFolder.name}</h2>
+                  <p className="text-gray-400 mb-8">{videos.length} videos</p>
 
-              {/* Videos Grid */}
-              {loadingVideos ? (
-                <p className="text-center text-gray-400 py-12">Loading...</p>
-              ) : videos.length === 0 ? (
-                <p className="text-center text-gray-400 py-12">No videos yet</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                  {videos.map((video, i) => (
-                    <Motion.div
-                      key={video.id}
-                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ delay: i * 0.05, duration: 0.3 }}
-                      whileHover={{ scale: 1.02, y: -4 }}
-                      onClick={() => handleVideoClick(video.video_url)}
-                      className="group cursor-pointer bg-white/5 border-2 border-white/10 rounded-xl md:rounded-2xl overflow-hidden hover:border-white/30 hover:shadow-xl hover:shadow-white/5 transition-all duration-300"
-                    >
-                      {/* Thumbnail */}
-                      <div className="aspect-video bg-zinc-800 relative overflow-hidden">
-                        {video.thumbnail_url ? (
-                          <img
-                            src={video.thumbnail_url}
-                            alt={video.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Play size={48} className="text-white/20" />
+                  {/* Videos Grid */}
+                  {loadingVideos ? (
+                    <p className="text-center text-gray-400 py-12">Loading...</p>
+                  ) : videos.length === 0 ? (
+                    <p className="text-center text-gray-400 py-12">No videos yet</p>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                      {videos.map((video, i) => (
+                        <Motion.div
+                          key={video.id}
+                          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          transition={{ delay: i * 0.05, duration: 0.3 }}
+                          whileHover={{ scale: 1.02, y: -4 }}
+                          onClick={() => handleVideoClick(video.video_url)}
+                          className="group cursor-pointer bg-white/5 border-2 border-white/10 rounded-xl md:rounded-2xl overflow-hidden hover:border-white/30 hover:shadow-xl hover:shadow-white/5 transition-all duration-300"
+                        >
+                          {/* Thumbnail */}
+                          <div className="aspect-video bg-zinc-800 relative overflow-hidden">
+                            {video.thumbnail_url ? (
+                              <img
+                                src={video.thumbnail_url}
+                                alt={video.title}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <Play size={48} className="text-white/20" />
+                              </div>
+                            )}
+                            
+                            {/* Play Overlay */}
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                              <Motion.div 
+                                initial={false}
+                                whileHover={{ scale: 1.15 }}
+                                className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/40 shadow-lg"
+                              >
+                                <Play size={28} className="text-white ml-1" fill="white" />
+                              </Motion.div>
+                            </div>
                           </div>
-                        )}
-                        
-                        {/* Play Overlay */}
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <Motion.div 
-                            initial={false}
-                            whileHover={{ scale: 1.15 }}
-                            className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/40 shadow-lg"
-                          >
-                            <Play size={28} className="text-white ml-1" fill="white" />
-                          </Motion.div>
-                        </div>
-                      </div>
 
-                      {/* Title */}
-                      <div className="p-4">
-                        <h3 className="text-white font-semibold truncate">{video.title}</h3>
-                      </div>
-                    </Motion.div>
-                  ))}
-                </div>
-              )}
-              </Motion.div>
-            </div>
-          </Motion.div>
-        )}
-      </AnimatePresence>
+                          {/* Title */}
+                          <div className="p-4">
+                            <h3 className="text-white font-semibold truncate">{video.title}</h3>
+                          </div>
+                        </Motion.div>
+                      ))}
+                    </div>
+                  )}
+                </Motion.div>
+              </div>
+            </Motion.div>
+          </div>
+        </AnimatePresence>,
+        document.body
+      )}
 
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {

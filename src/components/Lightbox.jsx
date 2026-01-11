@@ -13,11 +13,13 @@ const Lightbox = ({ videoSrc, onClose }) => {
     if (videoSrc) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('lightbox-open');
     }
     
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
+      document.body.classList.remove('lightbox-open');
     };
   }, [videoSrc, onClose]);
 
@@ -34,20 +36,22 @@ const Lightbox = ({ videoSrc, onClose }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/95"
+              className="fixed inset-0 bg-black/95"
+              style={{ top: 0, left: 0, right: 0, bottom: 0 }}
               onClick={onClose}
             />
             
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-red-500 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
+              className="fixed top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-red-500 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
+              style={{ top: '1rem', right: '1rem' }}
             >
               <X size={24} />
             </button>
 
             {/* Video Container - Centered */}
-            <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8 pointer-events-none">
+            <div className="fixed inset-0 flex items-center justify-center p-4 md:p-8 pointer-events-none" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
               <Motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -63,19 +67,22 @@ const Lightbox = ({ videoSrc, onClose }) => {
                   {videoSrc.includes('youtube.com') || videoSrc.includes('youtu.be') || videoSrc.includes('youtube-nocookie.com') ? (
                     <iframe
                       src={videoSrc}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                       className="absolute top-0 left-0 w-full h-full"
-                      allowFullScreen
+                      allowFullScreen={true}
+                      webkitallowfullscreen="true"
+                      mozallowfullscreen="true"
                       title="YouTube video player"
                       frameBorder="0"
-                      loading="lazy"
                     />
                   ) : videoSrc.includes('drive.google.com') ? (
                     <iframe
                       src={videoSrc}
                       allow="autoplay; fullscreen"
                       className="absolute top-0 left-0 w-full h-full"
-                      allowFullScreen
+                      allowFullScreen={true}
+                      webkitallowfullscreen="true"
+                      mozallowfullscreen="true"
                       title="Video player"
                     />
                   ) : (
@@ -97,8 +104,8 @@ const Lightbox = ({ videoSrc, onClose }) => {
                 <div className="absolute bottom-0 left-0 w-8 h-8 md:w-12 md:h-12 border-b-2 border-l-2 border-white/40 rounded-bl-xl pointer-events-none" />
                 <div className="absolute bottom-0 right-0 w-8 h-8 md:w-12 md:h-12 border-b-2 border-r-2 border-white/40 rounded-br-xl pointer-events-none" />
               </div>
-            </Motion.div>
-          </div>
+              </Motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>

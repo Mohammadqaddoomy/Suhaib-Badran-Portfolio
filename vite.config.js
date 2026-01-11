@@ -5,6 +5,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
+        allowedHosts: ['sheep-schools-real-editors.trycloudflare.com']
+
   },
   build: {
     // Optimize chunk sizes

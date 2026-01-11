@@ -1,9 +1,7 @@
 import { motion as Motion } from 'framer-motion';
-import { useTheme } from '../context/ThemeContext';
 import { useState, useRef } from 'react';
 
 const FileCard = ({ title, onClick, logoUrl }) => {
-  const { isDark } = useTheme();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
 

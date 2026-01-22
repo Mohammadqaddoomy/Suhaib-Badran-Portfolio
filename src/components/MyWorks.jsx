@@ -252,30 +252,16 @@ const MyWorks = ({ setLightboxVideo }) => {
           className="text-center mt-20"
         >
           <div className="relative group inline-block">
-            {/* Animated Rainbow Border */}
-            <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-all duration-1000 pointer-events-none rounded-full">
-              <div className="absolute inset-0 rounded-full overflow-hidden">
-                <div 
-                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                  style={{ 
-                    backgroundSize: '600% 100%', 
-                    animation: 'smoothRainbow 40s linear infinite',
-                    WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                    willChange: 'background-position'
-                  }} 
-                />
-              </div>
-            </div>
-            {/* Glow Effect */}
-            <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-50 transition-all duration-1000 pointer-events-none blur-md rounded-full">
+            {/* Animated Rainbow Border on hover */}
+            <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-full overflow-hidden">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                style={{ 
-                  backgroundSize: '600% 100%', 
-                  animation: 'smoothRainbow 40s linear infinite',
-                  WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                  willChange: 'background-position'
-                }} 
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+              />
+            </div>
+            {/* Glow Effect - reduced */}
+            <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none blur-sm rounded-full overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
               />
             </div>
             <Motion.button
@@ -299,28 +285,27 @@ const MyWorks = ({ setLightboxVideo }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={handleCloseModal}
               className="fixed inset-0 bg-black/95 overflow-y-auto overscroll-contain"
               style={{ top: 0, left: 0, right: 0, bottom: 0, WebkitOverflowScrolling: 'touch' }}
             >
               <div className="min-h-full flex items-center justify-center p-4 sm:p-6 md:p-8">
                 <Motion.div
-                  initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                  exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.2 }}
                   onClick={(e) => e.stopPropagation()}
-                  className="relative bg-zinc-900/95 backdrop-blur-xl border-2 border-white/10 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-10 max-w-6xl w-full my-4 md:my-8 shadow-2xl max-h-[90vh] overflow-y-auto overscroll-contain"
+                  className="relative bg-zinc-900 border-2 border-white/10 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-10 max-w-6xl w-full my-4 md:my-8 shadow-2xl max-h-[90vh] overflow-y-auto overscroll-contain"
                 >
                   {/* Close */}
-                  <Motion.button
+                  <button
                     onClick={handleCloseModal}
-                    whileHover={{ scale: 1.1, rotate: 90 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="sticky top-0 md:absolute md:top-6 md:right-6 ml-auto mb-4 md:mb-0 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center z-20 transition-all duration-200 backdrop-blur-sm border border-white/10"
+                    className="sticky top-0 md:absolute md:top-6 md:right-6 ml-auto mb-4 md:mb-0 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center z-20 transition-colors duration-200 border border-white/10"
                   >
                     <X size={20} />
-                  </Motion.button>
+                  </button>
 
                   {/* Title */}
                   <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">{selectedFolder.name}</h2>
@@ -336,12 +321,11 @@ const MyWorks = ({ setLightboxVideo }) => {
                       {videos.map((video, i) => (
                         <Motion.div
                           key={video.id}
-                          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          transition={{ delay: i * 0.05, duration: 0.3 }}
-                          whileHover={{ scale: 1.02, y: -4 }}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.03, duration: 0.2 }}
                           onClick={() => handleVideoClick(video.video_url)}
-                          className="group cursor-pointer bg-white/5 border-2 border-white/10 rounded-xl md:rounded-2xl overflow-hidden hover:border-white/30 hover:shadow-xl hover:shadow-white/5 transition-all duration-300"
+                          className="group cursor-pointer bg-white/5 border-2 border-white/10 rounded-xl md:rounded-2xl overflow-hidden hover:border-white/30 hover:shadow-xl hover:shadow-white/5 transition-all duration-200"
                         >
                           {/* Thumbnail */}
                           <div className="aspect-video bg-zinc-800 relative overflow-hidden">
@@ -349,7 +333,7 @@ const MyWorks = ({ setLightboxVideo }) => {
                               <img
                                 src={video.thumbnail_url}
                                 alt={video.title}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                                className="w-full h-full object-cover sm:group-hover:scale-105 transition-transform duration-300 ease-out"
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">

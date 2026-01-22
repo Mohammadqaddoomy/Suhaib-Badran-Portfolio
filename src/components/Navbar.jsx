@@ -86,30 +86,16 @@ const Navbar = () => {
             
             {/* Let's Talk Button with Animated Border */}
             <div className="relative group ml-4">
-              {/* Animated Rainbow Border - Always Visible */}
-              <div className="absolute -inset-[2px] opacity-100 transition-all duration-1000 pointer-events-none rounded-full">
-                <div className="absolute inset-0 rounded-full overflow-hidden">
-                  <div 
-                    className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                    style={{ 
-                      backgroundSize: '600% 100%', 
-                      animation: 'smoothRainbow 40s linear infinite',
-                      WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                      willChange: 'background-position'
-                    }} 
-                  />
-                </div>
-              </div>
-              {/* Glow Effect */}
-              <div className="absolute -inset-[3px] opacity-50 transition-all duration-1000 pointer-events-none blur-md rounded-full">
+              {/* Animated Rainbow Border */}
+              <div className="absolute -inset-[2px] opacity-100 pointer-events-none rounded-full overflow-hidden">
                 <div 
-                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                  style={{ 
-                    backgroundSize: '600% 100%', 
-                    animation: 'smoothRainbow 40s linear infinite',
-                    WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                    willChange: 'background-position'
-                  }} 
+                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+                />
+              </div>
+              {/* Glow Effect - reduced */}
+              <div className="absolute -inset-[3px] opacity-40 pointer-events-none blur-sm rounded-full overflow-hidden">
+                <div 
+                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
                 />
               </div>
               <Motion.button

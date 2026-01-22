@@ -7,6 +7,50 @@
   -webkit-touch-callout: none;
 }
 
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Disable backdrop-filter on iOS - causes severe lag */
+  .backdrop-blur-xl,
+  .backdrop-blur-lg,
+  .backdrop-blur-md,
+  .backdrop-blur-sm {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Use solid backgrounds instead on iOS */
+  .bg-zinc-900\/95 {
+    background-color: rgb(24 24 27) !important;
+  }
+  
+  .bg-black\/95 {
+    background-color: rgb(0 0 0 / 0.98) !important;
+  }
+  
+  /* Disable 3D transforms on iOS */
+  .group-hover\:-rotate-x-\[20deg\],
+  .group-hover\:-rotate-x-\[30deg\],
+  .group-hover\:-rotate-x-\[38deg\],
+  .group-hover\:-rotate-x-\[46deg\] {
+    transform: none !important;
+  }
+  
+  /* Reduce animation complexity on iOS */
+  * {
+    animation-duration: 0.3s !important;
+  }
+  
+  /* Prevent iOS rubber-band scrolling issues in modals */
+  .lightbox-portal {
+    -webkit-overflow-scrolling: auto;
+  }
+  
+  /* Fix iOS viewport height issues */
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+}
+
 /* Lightbox Portal - Must render above everything */
 .lightbox-portal {
   position: fixed !important;
@@ -86,8 +130,6 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  /* Force layer for Android */
-  will-change: transform;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -96,7 +138,6 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  will-change: transform;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -138,6 +179,23 @@ body {
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+/* Optimized rainbow animation - GPU accelerated */
+.animate-rainbow-slow {
+  background-size: 200% 100%;
+  animation: rainbowSlide 8s linear infinite;
+  transform: translateZ(0); /* Force GPU acceleration */
+  backface-visibility: hidden;
+}
+
+@keyframes rainbowSlide {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
   }
 }
 
@@ -211,12 +269,7 @@ body {
     #ff006e,
     #ff6b00
   );
-  background-size: 300% 300%;
-  animation: gradient-rotate 4s ease infinite;
-  box-shadow: 
-    0 0 30px rgba(255, 107, 0, 0.5),
-    0 0 60px rgba(255, 0, 255, 0.4),
-    0 0 90px rgba(0, 212, 255, 0.3);
+  background-size: 100% 100%;
 }
 
 .animate-shimmer {
@@ -226,8 +279,7 @@ body {
     rgba(255, 255, 255, 0.3) 50%,
     rgba(255, 255, 255, 0) 100%
   );
-  background-size: 1000px 100%;
-  animation: shimmer 3s infinite;
+  background-size: 100% 100%;
 }
 
 .perspective-card {
@@ -257,7 +309,45 @@ body {
   background: #333;
 }
 
-/* Mobile Performance Optimizations */
+/* Performance Optimizations for all devices including MacBook */
+/* Reduce blur effects globally */
+.blur-3xl {
+  filter: blur(32px) !important;
+}
+
+.blur-2xl {
+  filter: blur(24px) !important;
+}
+
+.blur-xl {
+  filter: blur(16px) !important;
+}
+
+.blur-lg {
+  filter: blur(8px) !important;
+}
+
+.blur-md {
+  filter: blur(6px) !important;
+}
+
+/* Reduce backdrop blur which is very expensive */
+.backdrop-blur-xl {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.backdrop-blur-lg {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+/* Mobile specific optimizations */
 @media (max-width: 768px) {
   /* Reduce animation durations for faster rendering */
   * {
@@ -269,13 +359,14 @@ body {
     transition-duration: 0.2s !important;
   }
   
-  /* Reduce blur effects on mobile */
-  .blur-3xl {
-    filter: blur(40px) !important;
+  /* Further reduce blur on mobile */
+  .blur-3xl, .blur-2xl {
+    filter: blur(20px) !important;
   }
   
   .backdrop-blur-sm {
     backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
   }
   
   /* Optimize images */
@@ -285,10 +376,9 @@ body {
   }
 }
 
-/* Hardware acceleration for smooth animations - using will-change instead of transform */
-.glass-effect,
-.gradient-text {
-  will-change: transform, opacity;
+/* Hardware acceleration only when needed */
+.glass-effect {
+  /* will-change removed - only add when animating */
 }
 
 /* Reduce motion for accessibility and better performance on low-end devices */
@@ -299,6 +389,17 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Remove blur effects entirely for reduced motion */
+  .blur-3xl, .blur-2xl, .blur-xl, .blur-lg, .blur-md {
+    filter: none !important;
+  }
+  
+  .backdrop-blur-xl, .backdrop-blur-lg, .backdrop-blur-md, .backdrop-blur-sm {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
 

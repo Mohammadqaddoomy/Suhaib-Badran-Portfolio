@@ -9,29 +9,10 @@ const Hero = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-24 pb-16 px-4 overflow-hidden bg-black transition-colors duration-300">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
-        <Motion.div
-          animate={{ 
-            y: [0, -30, 0],
-            rotate: [0, 10, 0]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 right-10 w-72 h-72 rounded-full blur-3xl bg-white/5"
-        />
-        <Motion.div
-          animate={{ 
-            y: [0, 30, 0],
-            x: [0, -20, 0]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-20 left-10 w-96 h-96 rounded-full blur-3xl bg-white/5"
-        />
-      </div>
-      {/* Static background for mobile */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none md:hidden">
-        <div className="absolute top-20 right-10 w-72 h-72 rounded-full blur-3xl bg-white/5" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 rounded-full blur-3xl bg-white/5" />
+      {/* Static Background Elements - removed infinite animations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 right-10 w-72 h-72 rounded-full blur-2xl bg-white/5" />
+        <div className="absolute bottom-20 left-10 w-96 h-96 rounded-full blur-2xl bg-white/5" />
       </div>
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
@@ -78,30 +59,16 @@ const Hero = () => {
               className="flex flex-wrap gap-4 justify-center lg:justify-start"
             >
                <div className="relative group">
-                {/* Animated Rainbow Border */}
-                <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-all duration-1000 pointer-events-none rounded-full">
-                  <div className="absolute inset-0 rounded-full overflow-hidden">
-                    <div 
-                      className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                      style={{ 
-                        backgroundSize: '600% 100%', 
-                        animation: 'smoothRainbow 40s linear infinite',
-                        WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                        willChange: 'background-position'
-                      }} 
-                    />
-                  </div>
-                </div>
-                {/* Glow Effect */}
-                <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-50 transition-all duration-1000 pointer-events-none blur-md rounded-full">
+                {/* Animated Rainbow Border - only on hover */}
+                <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-full overflow-hidden">
                   <div 
-                    className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                    style={{ 
-                      backgroundSize: '600% 100%', 
-                      animation: 'smoothRainbow 40s linear infinite',
-                      WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                      willChange: 'background-position'
-                    }} 
+                    className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+                  />
+                </div>
+                {/* Glow Effect - reduced blur */}
+                <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none blur-sm rounded-full overflow-hidden">
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
                   />
                 </div>
                 <Motion.button
@@ -138,34 +105,14 @@ const Hero = () => {
               >
                 <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[450px] md:h-[450px] lg:w-[500px] lg:h-[500px]">
                   
-                  {/* Apple Intelligence Rainbow Border */}
-                  <div className="absolute -inset-0.5 opacity-100 transition-all duration-1000 pointer-events-none">
-                    <div className="absolute inset-0 rounded-[40px] overflow-hidden">
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400" 
-                        style={{ 
-                          backgroundSize: '600% 100%',
-                          animation: 'smoothRainbow 40s linear infinite',
-                          WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                          willChange: 'background-position'
-                        }} 
-                      />
-                    </div>
+                  {/* Animated Rainbow Border */}
+                  <div className="absolute -inset-0.5 pointer-events-none rounded-[40px] overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow" />
                   </div>
 
-                  {/* Animated Glow */}
-                  <div className="absolute -inset-1 opacity-70 transition-all duration-1000 pointer-events-none blur-xl">
-                    <div className="absolute inset-0 rounded-[40px] overflow-hidden">
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                        style={{ 
-                          backgroundSize: '600% 100%',
-                          animation: 'smoothRainbow 40s linear infinite',
-                          WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                          willChange: 'background-position'
-                        }} 
-                      />
-                    </div>
+                  {/* Animated Glow - reduced blur */}
+                  <div className="absolute -inset-1 opacity-50 pointer-events-none blur-lg rounded-[40px] overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow" />
                   </div>
                   
                   {/* Image with modern border */}

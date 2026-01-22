@@ -1,10 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  darkMode: 'class', // Enable dark mode with class strategy
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class", // Enable dark mode with class strategy
   theme: {
     extend: {
       colors: {
@@ -16,6 +13,7 @@ export default {
         "fade-in": "fadeIn 0.5s ease-in",
         "slide-up": "slideUp 0.5s ease-out",
         "scale-in": "scaleIn 0.3s ease-out",
+        "rainbow-slow": "rainbowSlow 8s linear infinite",
       },
       keyframes: {
         float: {
@@ -34,12 +32,19 @@ export default {
           "0%": { transform: "scale(0.9)", opacity: "0" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
+        rainbowSlow: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "200% 50%" },
+        },
+      },
+      backgroundSize: {
+        "200%": "200% 100%",
       },
       fontFamily: {
-        playfair: ['"Playfair Display"', 'serif'],
-        inter: ['Inter', 'sans-serif'],
+        playfair: ['"Playfair Display"', "serif"],
+        inter: ["Inter", "sans-serif"],
       },
     },
   },
   plugins: [],
-}
+};

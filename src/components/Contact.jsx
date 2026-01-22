@@ -49,30 +49,16 @@ const Contact = () => {
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-16 px-4">
           {/* Phone Card */}
           <div className="relative group w-full sm:w-auto">
-            {/* Animated Rainbow Border */}
-            <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-all duration-1000 pointer-events-none rounded-2xl">
-              <div className="absolute inset-0 rounded-2xl overflow-hidden">
-                <div 
-                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                  style={{
-                    backgroundSize: '400% 100%',
-                    animation: 'smoothRainbow 8s ease-in-out infinite',
-                    WebkitAnimation: 'smoothRainbow 8s ease-in-out infinite',
-                    willChange: 'background-position'
-                  }}
-                />
-              </div>
-            </div>
-            {/* Glow Effect */}
-            <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-50 transition-all duration-1000 pointer-events-none blur-md rounded-2xl">
+            {/* Animated Rainbow Border on hover */}
+            <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl overflow-hidden">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                style={{
-                  backgroundSize: '400% 100%',
-                  animation: 'smoothRainbow 8s ease-in-out infinite',
-                  WebkitAnimation: 'smoothRainbow 8s ease-in-out infinite',
-                  willChange: 'background-position'
-                }}
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+              />
+            </div>
+            {/* Glow Effect - reduced */}
+            <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none blur-sm rounded-2xl overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
               />
             </div>
             <Motion.a
@@ -101,30 +87,16 @@ Whatsapp
 
           {/* Email Card */}
           <div className="relative group w-full sm:w-auto">
-            {/* Animated Rainbow Border */}
-            <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-all duration-1000 pointer-events-none rounded-2xl">
-              <div className="absolute inset-0 rounded-2xl overflow-hidden">
-                <div 
-                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                  style={{
-                    backgroundSize: '600% 100%',
-                    animation: 'smoothRainbow 40s linear infinite',
-                    WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                    willChange: 'background-position'
-                  }}
-                />
-              </div>
-            </div>
-            {/* Glow Effect */}
-            <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-50 transition-all duration-1000 pointer-events-none blur-md rounded-2xl">
+            {/* Animated Rainbow Border on hover */}
+            <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl overflow-hidden">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                style={{
-                  backgroundSize: '600% 100%',
-                  animation: 'smoothRainbow 40s linear infinite',
-                  WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                  willChange: 'background-position'
-                }}
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+              />
+            </div>
+            {/* Glow Effect - reduced */}
+            <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none blur-sm rounded-2xl overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
               />
             </div>
             <Motion.a
@@ -166,30 +138,16 @@ Whatsapp
               const Icon = social.icon;
               return (
                 <div key={social.label} className="relative group">
-                  {/* Animated Rainbow Border */}
-                  <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-all duration-1000 pointer-events-none rounded-full">
-                    <div className="absolute inset-0 rounded-full overflow-hidden">
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                        style={{
-                          backgroundSize: '600% 100%',
-                          animation: 'smoothRainbow 40s linear infinite',
-                          WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                          willChange: 'background-position'
-                        }}
-                      />
-                    </div>
-                  </div>
-                  {/* Glow Effect */}
-                  <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-50 transition-all duration-1000 pointer-events-none blur-md rounded-full">
+                  {/* Animated Rainbow Border on hover */}
+                  <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-full overflow-hidden">
                     <div 
-                      className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400"
-                      style={{
-                        backgroundSize: '600% 100%',
-                        animation: 'smoothRainbow 40s linear infinite',
-                        WebkitAnimation: 'smoothRainbow 40s linear infinite',
-                        willChange: 'background-position'
-                      }}
+                      className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+                    />
+                  </div>
+                  {/* Glow Effect - reduced */}
+                  <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none blur-sm rounded-full overflow-hidden">
+                    <div 
+                      className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
                     />
                   </div>
                   <Motion.a

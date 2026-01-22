@@ -41,10 +41,10 @@ const Lightbox = ({ videoSrc, onClose }) => {
               onClick={onClose}
             />
             
-            {/* Close Button */}
+            {/* Close Button - removed backdrop-blur for iOS */}
             <button
               onClick={onClose}
-              className="fixed top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-red-500 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
+              className="fixed top-4 right-4 z-10 w-12 h-12 rounded-full bg-zinc-800 border border-white/20 text-white hover:bg-red-500 hover:border-red-500 transition-colors duration-200 flex items-center justify-center"
               style={{ top: '1rem', right: '1rem' }}
             >
               <X size={24} />
@@ -53,9 +53,10 @@ const Lightbox = ({ videoSrc, onClose }) => {
             {/* Video Container - Centered */}
             <div className="fixed inset-0 flex items-center justify-center p-4 md:p-8 pointer-events-none" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
               <Motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.2 }}
                 className="w-full max-w-5xl pointer-events-auto"
                 onClick={(e) => e.stopPropagation()}
               >

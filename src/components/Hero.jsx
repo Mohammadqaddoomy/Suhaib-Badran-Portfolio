@@ -1,7 +1,15 @@
 import { motion as Motion } from 'framer-motion';
 import { ArrowDown, Image, Sparkles, Star } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const Hero = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  // Delay animations until after initial render
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
   
   const scrollToWork = () => {
     document.getElementById('my-work')?.scrollIntoView({ behavior: 'smooth' });
@@ -18,20 +26,13 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Side - Text Content */}
-          <Motion.div
-            initial={{ opacity: 0, x: 0 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6 md:space-y-8 text-center lg:text-left"
+          <div
+            className={`space-y-6 md:space-y-8 text-center lg:text-left transition-opacity duration-500 ${isMounted ? 'opacity-100' : 'opacity-0'}`}
           >
             {/* Badge */}
            
 
-            <Motion.div
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.3 }}
-            >
+            <div>
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tight mb-4 md:mb-6 text-white">
                 Sohaib
                 
@@ -40,22 +41,16 @@ const Hero = () => {
                 
               </h1>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[0.9] tracking-tight mb-4 md:mb-6 text-white">Visual Artist</h2>
-            </Motion.div>
+            </div>
             
-            <Motion.p
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.3 }}
+            <p
               className="text-lg md:text-xl lg:text-2xl leading-relaxed max-w-xl font-light mx-auto lg:mx-0 text-gray-300"
             >
               I Don't Chase Trends.<br></br>
               <span className="font-semibold text-white"> I Craft visuals that feel <br></br> </span>timeless.
-            </Motion.p>
+            </p>
             
-            <Motion.div
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.3 }}
+            <div
               className="flex flex-wrap gap-4 justify-center lg:justify-start"
             >
                <div className="relative group">
@@ -71,7 +66,7 @@ const Hero = () => {
                     className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
                   />
                 </div>
-                <Motion.button
+                <button
                  
                   onClick={scrollToWork}
                   className="relative px-6 sm:px-8 py-3 sm:py-4 border-2 border-black font-semibold text-base sm:text-lg rounded-full transition-all duration-300 text-black hover:brightness-90"
@@ -82,36 +77,30 @@ const Hero = () => {
               </div>
 
               
-            </Motion.div>
+            </div>
 
             {/* Stats */}
      
-          </Motion.div>
+          </div>
 
           {/* Right Side - Profile Image */}
-          <Motion.div
-            initial={{ opacity: 0, scale: 1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="flex justify-center lg:justify-end"
+          <div
+            className={`flex justify-center lg:justify-end transition-opacity duration-500 ${isMounted ? 'opacity-100' : 'opacity-0'}`}
           >
             <div className="relative">
               {/* Main Image Container */}
-              <Motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300 }}
+              <div
                 className="relative z-10 group"
               >
                 <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[450px] md:h-[450px] lg:w-[500px] lg:h-[500px]">
                   
-                  {/* Animated Rainbow Border */}
+                  {/* Rainbow Border - static gradient on mobile, animated on desktop */}
                   <div className="absolute -inset-0.5 pointer-events-none rounded-[40px] overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 sm:animate-rainbow-slow" />
                   </div>
 
-                  {/* Animated Glow - reduced blur */}
-                  <div className="absolute -inset-1 opacity-50 pointer-events-none blur-lg rounded-[40px] overflow-hidden">
+                  {/* Glow - hidden on mobile */}
+                  <div className="hidden sm:block absolute -inset-1 opacity-50 pointer-events-none blur-lg rounded-[40px] overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow" />
                   </div>
                   
@@ -126,35 +115,26 @@ const Hero = () => {
                     <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
                   </div>
                   
-                  {/* Decorative frame */}
-                  <div className="absolute -inset-4 border-2 rounded-[50px] -z-10 border-white/10" />
+                  {/* Decorative frame - hidden on mobile */}
+                  <div className="hidden sm:block absolute -inset-4 border-2 rounded-[50px] -z-10 border-white/10" />
                 </div>
-              </Motion.div>
+              </div>
 
               {/* Floating Elements */}
              
             </div>
             
-          </Motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <Motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+      {/* Scroll Indicator - hidden on mobile */}
+      <div
+        className="hidden sm:flex absolute bottom-8 left-1/2 transform -translate-x-1/2 flex-col items-center gap-2 text-gray-500"
       >
-        <Motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="flex flex-col items-center gap-2 text-gray-500"
-        >
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <ArrowDown size={20} />
-        </Motion.div>
-      </Motion.div>
+        <span className="text-xs uppercase tracking-widest">Scroll</span>
+        <ArrowDown size={20} />
+      </div>
     </section>
   );
 };

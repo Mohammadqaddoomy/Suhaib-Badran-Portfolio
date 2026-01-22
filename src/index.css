@@ -35,9 +35,27 @@
     transform: none !important;
   }
   
-  /* Reduce animation complexity on iOS */
-  * {
-    animation-duration: 0.3s !important;
+  /* CRITICAL: Disable ALL animations on iOS for first 0.5s to prevent render lag */
+  .animate-rainbow-slow {
+    animation: none !important;
+    background-size: 100% 100% !important;
+  }
+  
+  /* Disable framer-motion initial animations on iOS */
+  [style*="opacity: 0"],
+  [style*="transform"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  /* Disable blur effects completely on iOS */
+  .blur-2xl,
+  .blur-xl,
+  .blur-lg,
+  .blur-md,
+  .blur-sm {
+    filter: none !important;
   }
   
   /* Prevent iOS rubber-band scrolling issues in modals */

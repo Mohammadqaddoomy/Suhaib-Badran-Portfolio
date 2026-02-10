@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion as Motion } from 'framer-motion';
 import { supabase } from '../../config/firebase';
-import { Plus, Edit2, Trash2, Upload, ArrowLeft, Image as ImageIcon, FolderInput } from 'lucide-react';
+import { Plus, Edit2, Trash2, Upload, ArrowLeft, Image as ImageIcon, FolderInput, ChevronUp, ChevronDown } from 'lucide-react';
 
 const Videos = () => {
   const { folderId } = useParams();
@@ -83,6 +83,31 @@ const Videos = () => {
       console.error('Error moving video:', error);
       alert('Error moving video. Please try again.');
     }
+  };
+
+  const handleMoveVideoOrder = async (videoIndex, direction) => {
+    const newIndex = direction === 'up' ? videoIndex - 1 : videoIndex + 1;
+    
+    // Check bounds
+    if (newIndex < 0 || newIndex >= videos.length) return;
+
+    const currentVideo = videos[videoIndex];
+    const swapVideo = videos[newIndex];
+
+    // Optimistic UI update - swap immediately in state
+    const newVideos = [...videos];
+    newVideos[videoIndex] = { ...swapVideo, order: videoIndex };
+    newVideos[newIndex] = { ...currentVideo, order: newIndex };
+    setVideos(newVideos);
+
+    // Update database in parallel (background)
+    Promise.all([
+      supabase.from('videos').update({ order: newIndex }).eq('id', currentVideo.id),
+      supabase.from('videos').update({ order: videoIndex }).eq('id', swapVideo.id)
+    ]).catch(error => {
+      console.error('Error moving video:', error);
+      fetchFolderAndVideos(); // Revert on error
+    });
   };
 
   const handleThumbnailChange = (e) => {
@@ -290,6 +315,38 @@ const Videos = () => {
                 <p className="text-gray-400 text-sm truncate mb-4">{video.video_url}</p>
 
                 <div className="flex gap-2">
+                  {/* Move Up Button */}
+                  <Motion.button
+                    onClick={() => handleMoveVideoOrder(index, 'up')}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    disabled={index === 0}
+                    className={`flex items-center justify-center px-2 py-2 rounded-xl transition-colors ${
+                      index === 0 
+                        ? 'bg-white/5 text-white/20 cursor-not-allowed' 
+                        : 'bg-white/10 text-white hover:bg-white/20'
+                    }`}
+                    title="Move up"
+                  >
+                    <ChevronUp size={16} />
+                  </Motion.button>
+                  
+                  {/* Move Down Button */}
+                  <Motion.button
+                    onClick={() => handleMoveVideoOrder(index, 'down')}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    disabled={index === videos.length - 1}
+                    className={`flex items-center justify-center px-2 py-2 rounded-xl transition-colors ${
+                      index === videos.length - 1 
+                        ? 'bg-white/5 text-white/20 cursor-not-allowed' 
+                        : 'bg-white/10 text-white hover:bg-white/20'
+                    }`}
+                    title="Move down"
+                  >
+                    <ChevronDown size={16} />
+                  </Motion.button>
+
                   <Motion.button
                     onClick={() => openEditModal(video)}
                     whileHover={{ scale: 1.05 }}

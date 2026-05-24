@@ -269,7 +269,7 @@ const MyWorks = ({ setLightboxVideo }) => {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="relative px-8 py-4 text-black font-semibold rounded-full hover:brightness-90 transition-all cursor-pointer"
-              style={{ backgroundColor: '#ffd4d4' }}
+              style={{ backgroundColor: '#C368FC' }}
             >
               Let's Work Together
             </Motion.button>

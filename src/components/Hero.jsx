@@ -36,7 +36,7 @@ const Hero = () => {
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tight mb-4 md:mb-6 text-white">
                 Sohaib
                 
-                <span className="gradient-text">Badran</span>
+                <span className="text-white">Badran</span>
                 
                 
               </h1>
@@ -44,10 +44,10 @@ const Hero = () => {
             </div>
             
             <p
-              className="text-lg md:text-xl lg:text-2xl leading-relaxed max-w-xl font-light mx-auto lg:mx-0 text-gray-300"
+              className="text-lg md:text-xl lg:text-2xl leading-relaxed max-w-xl font-light mx-auto lg:mx-0 text-white"
             >
-              I Don't Chase Trends.<br></br>
-              <span className="font-semibold text-white"> I Craft visuals that feel <br></br> </span>timeless.
+              I don't chase Trends.<br></br>
+              <span className=" text-white"> I craft visuals that feel  </span>timeless.
             </p>
             
             <div
@@ -69,7 +69,7 @@ const Hero = () => {
                 <button
                   onClick={scrollToWork}
                   className="relative px-6 sm:px-8 py-3 sm:py-4 border-2 border-black font-semibold text-base sm:text-lg rounded-full transition-all duration-300 text-black hover:brightness-90"
-                  style={{ backgroundColor: '#ffd4d4' }}
+                  style={{ backgroundColor: '#C368FC' }}
                 >
                   View My Work
                 </button>
@@ -95,12 +95,12 @@ const Hero = () => {
                   
                   {/* Rainbow Border - static gradient on mobile, animated on desktop */}
                   <div className="absolute -inset-0.5 pointer-events-none rounded-[40px] overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 sm:animate-rainbow-slow" />
+                    <div className="absolute inset-0 " />
                   </div>
 
                   {/* Glow - hidden on mobile */}
                   <div className="hidden sm:block absolute -inset-1 opacity-50 pointer-events-none blur-lg rounded-[40px] overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow" />
+                    <div className="absolute inset-0 " />
                   </div>
                   
                   {/* Image with modern border */}

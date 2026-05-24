@@ -169,7 +169,7 @@ const Services = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               className="relative px-8 py-4 font-semibold text-black rounded-full transition-all duration-300 shadow-lg hover:shadow-2xl hover:brightness-90"
-              style={{ backgroundColor: '#ffd4d4' }}
+              style={{ backgroundColor: '#C368FC' }}
             >
               Discuss Your Project
             </Motion.button>

@@ -52,13 +52,13 @@ const Contact = () => {
             {/* Animated Rainbow Border on hover */}
             <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl overflow-hidden">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+                className="absolute inset-0 "
               />
             </div>
             {/* Glow Effect - reduced */}
             <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none blur-sm rounded-2xl overflow-hidden">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+                className="absolute inset-0 "
               />
             </div>
             <Motion.a
@@ -90,13 +90,13 @@ Whatsapp
             {/* Animated Rainbow Border on hover */}
             <div className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl overflow-hidden">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+                className="absolute inset-0 "
               />
             </div>
             {/* Glow Effect - reduced */}
             <div className="absolute -inset-[3px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none blur-sm rounded-2xl overflow-hidden">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
+                className="absolute inset-0 "
               />
             </div>
             <Motion.a

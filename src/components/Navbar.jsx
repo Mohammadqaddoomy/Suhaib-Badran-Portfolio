@@ -28,6 +28,7 @@ const Navbar = () => {
     { id: 'home', label: 'Home' },
     { id: 'services', label: 'Services' },
     { id: 'my-work', label: 'My-works' },
+    { id: 'contact', label: 'lets-talk' }
   ];
 
   return (
@@ -48,7 +49,7 @@ const Navbar = () => {
             className="relative cursor-pointer group"
           >
             <span className="text-2xl lg:text-3xl font-black tracking-tighter">
-              <span className="gradient-text">PORTFOLIO</span>
+              <span className="text-white">PORTFOLIO</span>
             </span>
             <Motion.div
               className="absolute -bottom-1 left-0 h-0.5 bg-black"
@@ -85,29 +86,21 @@ const Navbar = () => {
             ))}
             
             {/* Let's Talk Button with Animated Border */}
-            <div className="relative group ml-4">
+            {/* <div className="relative group ml-4"> */}
               {/* Animated Rainbow Border */}
-              <div className="absolute -inset-[2px] opacity-100 pointer-events-none rounded-full overflow-hidden">
-                <div 
-                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
-                />
-              </div>
+             
               {/* Glow Effect - reduced */}
-              <div className="absolute -inset-[3px] opacity-40 pointer-events-none blur-sm rounded-full overflow-hidden">
-                <div 
-                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 via-purple-500 via-blue-500 to-orange-400 animate-rainbow-slow"
-                />
-              </div>
-              <Motion.button
+              
+              {/* <Motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => scrollToSection('contact')}
-                className="relative px-6 py-2.5 font-semibold text-sm uppercase tracking-wider rounded-full transition-all duration-300 shadow-lg hover:shadow-2xl text-black hover:brightness-90"
-                style={{ backgroundColor: '#ffd4d4' }}
+                className="relative px-6 py-2.5 font-semibold text-sm uppercase tracking-wider rounded-full transition-all duration-300 shadow-lg hover:shadow-2xl text-gray-300"
+               
               >
                 Let's Talk
               </Motion.button>
-            </div>
+            </div> */}
             
            
           </div>

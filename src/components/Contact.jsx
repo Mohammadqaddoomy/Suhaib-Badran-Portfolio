@@ -38,7 +38,7 @@ const Contact = () => {
           <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tight text-white">
             Let's Create
             <br />
-            <span className="gradient-text">Something Amazing</span>
+            <span className="text-white">Something Amazing</span>
           </h2>
           
           <p className="text-xl max-w-2xl mx-auto font-light text-gray-300">

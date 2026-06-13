@@ -46,7 +46,7 @@ const Hero = () => {
             <p
               className="text-lg md:text-xl lg:text-2xl leading-relaxed max-w-xl font-light mx-auto lg:mx-0 text-white"
             >
-              I don't chase Trends.<br></br>
+              I don't chase trends.<br></br>
               <span className=" text-white"> I craft visuals that feel  </span>timeless.
             </p>
             

@@ -69,7 +69,7 @@ const Hero = () => {
                 <button
                   onClick={scrollToWork}
                   className="relative px-6 sm:px-8 py-3 sm:py-4 border-2 border-black font-semibold text-base sm:text-lg rounded-full transition-all duration-300 text-black hover:brightness-90"
-                  style={{ backgroundColor: '#C368FC' }}
+                  style={{ backgroundColor: '#9370db' }}
                 >
                   View My Work
                 </button>
